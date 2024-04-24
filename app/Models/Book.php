@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Book extends Model
 {
     use HasFactory,SoftDeletes,Common;
-    protected $table = 'book';
+    protected $table = 'tbl_book';
+    public $timestamps = true;
     protected $fillable = [
         'co_id',
         'publisher_id',

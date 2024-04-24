@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Book\BookRequest;
 use App\Http\Services\BookService;
 use Illuminate\Http\Request;
 
@@ -17,9 +18,9 @@ class BookController extends Controller
         return $this->bookService->index();
     }
 
-    public function store()
+    public function store(BookRequest $request)
     {
-        return $this->bookService->store();
+        return $this->bookService->store($request->validated());
     }
 
     public function show()

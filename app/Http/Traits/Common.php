@@ -36,7 +36,7 @@ trait Common{
         $now = $now->toDateTimeString();
         $model->update(
             [
-            "id"=>$model->id,
+            "idx"=>$model->id,
             "deleted_at"=>$now,
             ]
         );

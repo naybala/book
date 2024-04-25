@@ -96,17 +96,15 @@ class BookService extends Controller
         }
     }
 
-    private function imageDelete($image):void
+    private function imageDelete(object $image):void
     {
         File::delete(public_path() . '/images/book/' . $image);
     }
 
-    private function imageSave($image):string
+    private function imageSave(object $image):string
     {
         $imageName = time().'.'.$image->extension();
         $image->move(public_path('images/book'), $imageName);
         return $imageName;
     }
-
-
 }

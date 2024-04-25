@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Book\BookDeleteRequest;
 use App\Http\Requests\Book\BookShowRequest;
 use App\Http\Requests\Book\BookStoreRequest;
 use App\Http\Requests\Book\BookUpdateRequest;
@@ -36,8 +37,8 @@ class BookController extends Controller
         return $this->bookService->update($request->validated());
     }
 
-    // public function destroy():JsonResponse
-    // {
-    //     return $this->bookService->destroy();
-    // }
+    public function destroy(BookDeleteRequest $request):JsonResponse
+    {
+        return $this->bookService->destroy($request->validated());
+    }
 }

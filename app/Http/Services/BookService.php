@@ -3,12 +3,15 @@
 namespace App\Http\Services;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Book\BookDeleteRequest;
 use App\Http\Resources\Book\BookEditResource;
 use App\Http\Resources\Book\BookIndexResource;
 use App\Models\Book;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
+
 
 class BookService extends Controller
 {
@@ -43,14 +46,9 @@ class BookService extends Controller
         }
     }
 
-    private function imageSave($image):string
-    {
-        $imageName = time().'.'.$image->extension();
-        $image->move(public_path('images/book'), $imageName);
-        return $imageName;
-    }
 
-    public function show($request):JsonResponse
+
+    public function show(array $request):JsonResponse
     {
         try{
             $book = $this->book->where('idx',$request['idx'])->first();
@@ -62,23 +60,53 @@ class BookService extends Controller
         }
     }
 
-    public function update($request):JsonResponse
+    public function update(array $request):JsonResponse
     {
         try{
             $this->book->beginTransaction();
-            $request['cover_photo']= $this->imageSave($request['cover_photo']);
-            $request['created_at']=Carbon::now();
-            $this->book->create($request);
+            $book = $this->book->where('idx',$request['idx'])->first()->toArray();
+            if(isset($request['cover_photo'])){
+                $this->imageDelete($book['cover_photo']);
+                $request['cover_photo']= $this->imageSave($request['cover_photo']);
+            }else{
+                $request['cover_photo'] = $book['cover_photo'];
+            }
+            $request['updated_at']=Carbon::now();
+            $this->book->where('idx',$request['idx'])->update($request);
             $this->book->commit();
-            return $this->sendResponse("Book Store Success",[]);
+            return $this->sendResponse("Book Update Success",[]);
         }catch(Exception $e){
             $this->book->rollback();
             return $this->sendError($e->getMessage());
         }
     }
 
-    // public function destroy():JsonResponse
-    // {
+    public function destroy(array $request):JsonResponse
+    {
+        try{
+            $this->book->beginTransaction();
+            $book = $this->book->where('idx',$request['idx'])->first();
+            //$this->imageDelete($book['cover_photo']);
+            $this->book->softDelete($book);
+            $this->book->commit();
+            return $this->sendResponse("Book Delete Success",[]);
+        }catch(Exception $e){
+            $this->book->rollback();
+            return $this->sendError($e->getMessage());
+        }
+    }
 
-    // }
+    private function imageDelete($image):void
+    {
+        File::delete(public_path() . '/images/book/' . $image);
+    }
+
+    private function imageSave($image):string
+    {
+        $imageName = time().'.'.$image->extension();
+        $image->move(public_path('images/book'), $imageName);
+        return $imageName;
+    }
+
+
 }

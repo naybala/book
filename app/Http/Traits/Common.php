@@ -34,11 +34,8 @@ trait Common{
     {
         $now =Carbon::now();
         $now = $now->toDateTimeString();
-        $model->update(
-            [
-            "idx"=>$model->id,
-            "deleted_at"=>$now,
-            ]
+        $model->where('idx',$model->idx)->update(
+            ["deleted_at"=>$now]
         );
     }
 

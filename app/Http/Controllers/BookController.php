@@ -8,7 +8,6 @@ use App\Http\Requests\Book\BookStoreRequest;
 use App\Http\Requests\Book\BookUpdateRequest;
 use App\Http\Services\BookService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class BookController extends Controller
 {

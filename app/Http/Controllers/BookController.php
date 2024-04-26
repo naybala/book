@@ -16,12 +16,17 @@ class BookController extends Controller
     ) {
     }
 
-    public function index():JsonResponse
+    public function index()
     {
         return $this->bookService->index();
     }
 
-    public function store(BookStoreRequest $request):JsonResponse
+    public function create()
+    {
+        return $this->bookService->create();
+    }
+
+    public function store(BookStoreRequest $request)
     {
         return $this->bookService->store($request->validated());
     }

@@ -20,19 +20,25 @@ class BookService extends Controller
     ) {
     }
 
-    public function index():JsonResponse
+    public function index()
     {
         try{
             $books = $this->book->with(['publisher','contentOwner'])->paginate(20);
             $books = BookIndexResource::collection($books)->response()->getData(true);
-            return $this->sendResponse("Book Index Success",$books);
+            return view('book.index', [
+                'data' => $books,
+            ]);
         }catch(Exception $e){
             return $this->sendError($e->getMessage());
         }
     }
 
+    public function create()
+    {
+        return view('book.create');
+    }
 
-    public function store(array $request):JsonResponse
+    public function store(array $request)
     {
         try{
             $this->book->beginTransaction();
@@ -40,7 +46,9 @@ class BookService extends Controller
             $request['created_at']=Carbon::now();
             $this->book->create($request);
             $this->book->commit();
-            return $this->sendResponse("Book Store Success",[]);
+            return to_route('books.index')->with([
+                'success' => 'book was successfully created',
+            ]);
         }catch(Exception $e){
             $this->book->rollback();
             return $this->sendError($e->getMessage());
@@ -56,7 +64,9 @@ class BookService extends Controller
             }
             $book = new BookEditResource($book);
             $book = $book->response()->getData(true);
-            return $this->sendResponse("Book Show Success",$book);
+            return view('book.edit', [
+                'data' => $book,
+            ]);
         }catch(NoDataException $e){
             return $this->sendNoDataResponse($e->messages());
         }catch(Exception $e){

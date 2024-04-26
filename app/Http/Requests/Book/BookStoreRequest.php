@@ -27,7 +27,7 @@ class BookStoreRequest extends FormRequest
             'book_unique_idx' => ['required', 'string'],
             'book_name' => ['required', 'string'],
             'cover_photo' => ['required', 'image'],
-            'prize' => ['required', 'integer'],
+            'prize' => '',
         ];
     }
 }

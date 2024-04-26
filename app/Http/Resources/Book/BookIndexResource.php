@@ -20,8 +20,6 @@ class BookIndexResource extends JsonResource
             "publisher_id" => $this->publisher->name,
             "book_unique_idx" => $this->book_unique_idx,
             "book_name" => $this->book_name,
-            "cover_photo" => "images/book/".$this->cover_photo,
-            "prize"=> $this->prize,
             "created_at" => $this->created_at,
         ];
     }

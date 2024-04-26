@@ -52,11 +52,18 @@
                 <div class="mb-4 py-2">
                     <label for="remark" class="block mb-1 text-sm font-medium text-gray-900 dark:text-gray-300">Content
                         Owner</label>
-                    <input type="text" id="co_id" value="" name="co_id"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
-                    block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="">
+                    <select name="co_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
+                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="" value="" id="co_id">
+                        @foreach ($contentOwners as $key => $contentOwner)
+                            <option value="{{ $contentOwner['idx'] }}">
+                                {{ $contentOwner['name'] }}
+                            </option>
+                        @endforeach
+                    </select>
+
                 </div>
                 {{-- co_id --}}
 
@@ -64,11 +71,17 @@
                 <div class="mb-4 py-2">
                     <label for="remark"
                         class="block mb-1 text-sm font-medium text-gray-900 dark:text-gray-300">Publisher</label>
-                    <input type="text" id="publisher_id" value="" name="publisher_id"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500
-                    block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="">
+                    <select name="publisher_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
+                    dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="" value="" id="publisher_id">
+                        @foreach ($publishers as $key => $publisher)
+                            <option value="{{ $publisher['idx'] }}">
+                                {{ $publisher['name'] }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 {{-- publisher_id --}}
 
@@ -98,7 +111,7 @@
         </div>
         <div></div>
     </div>
-    @vite('resources/js/book/validation.js')
+    @vite('resources/js/book/createValidation.js')
     @vite('resources/js/validateDisapper.js')
 
 @endsection

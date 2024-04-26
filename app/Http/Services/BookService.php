@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 
 class BookService extends Controller
@@ -20,7 +22,7 @@ class BookService extends Controller
     ) {
     }
 
-    public function index()
+    public function index():View
     {
         try{
             $books = $this->book->with(['publisher','contentOwner'])->paginate(20);
@@ -32,13 +34,23 @@ class BookService extends Controller
             return $this->sendError($e->getMessage());
         }
     }
+    public function list():JsonResponse
+    {
+        try{
+            $books = $this->book->with(['publisher','contentOwner'])->paginate(20);
+            $books = BookIndexResource::collection($books)->response()->getData(true);
+            return $this->sendResponse("books index success",$books);
+        }catch(Exception $e){
+            return $this->sendError($e->getMessage());
+        }
+    }
 
-    public function create()
+    public function create():View
     {
         return view('book.create');
     }
 
-    public function store(array $request)
+    public function store(array $request):RedirectResponse
     {
         try{
             $this->book->beginTransaction();
@@ -55,17 +67,17 @@ class BookService extends Controller
         }
     }
 
-    public function show(array $request):JsonResponse
+    public function edit($idx):View | RedirectResponse
     {
         try{
-            $book = $this->book->where('idx',$request['idx'])->first();
+            $book = $this->book->where('idx',$idx)->first();
             if(!$book){
                 throw new NoDataException("idx not have in table");
             }
             $book = new BookEditResource($book);
             $book = $book->response()->getData(true);
             return view('book.edit', [
-                'data' => $book,
+                'data' => $book['data'],
             ]);
         }catch(NoDataException $e){
             return $this->sendNoDataResponse($e->messages());
@@ -75,7 +87,7 @@ class BookService extends Controller
     }
 
 
-    public function update(array $request):JsonResponse
+    public function update(array $request):RedirectResponse
     {
         try{
             $this->book->beginTransaction();
@@ -89,14 +101,16 @@ class BookService extends Controller
             $request['updated_at']=Carbon::now();
             $this->book->where('idx',$request['idx'])->update($request);
             $this->book->commit();
-            return $this->sendResponse("Book Update Success",[]);
+            return to_route('books.index')->with([
+                'success' => 'book was successfully updated',
+            ]);
         }catch(Exception $e){
             $this->book->rollback();
             return $this->sendError($e->getMessage());
         }
     }
 
-    public function destroy(array $request):JsonResponse
+    public function destroy(array $request):RedirectResponse
     {
         try{
             $this->book->beginTransaction();
@@ -104,7 +118,9 @@ class BookService extends Controller
             //$this->imageDelete($book['cover_photo']);
             $this->book->softDelete($book);
             $this->book->commit();
-            return $this->sendResponse("Book Delete Success",[]);
+            return to_route('books.index')->with([
+                'success' => 'book was successfully deleted',
+            ]);
         }catch(Exception $e){
             $this->book->rollback();
             return $this->sendError($e->getMessage());

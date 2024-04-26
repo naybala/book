@@ -20,7 +20,7 @@ class BookEditResource extends JsonResource
             "publisher_id" => $this->publisher_id,
             "book_unique_idx" => $this->book_unique_idx,
             "book_name" => $this->book_name,
-            "cover_photo" => "images/book/".$this->cover_photo,
+            "cover_photo" => "http://127.0.0.1:8000/images/book/".$this->cover_photo,
             "prize"=> $this->prize,
         ];
     }

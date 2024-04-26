@@ -2,8 +2,8 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\NoDataException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Book\BookDeleteRequest;
 use App\Http\Resources\Book\BookEditResource;
 use App\Http\Resources\Book\BookIndexResource;
 use App\Models\Book;
@@ -46,15 +46,18 @@ class BookService extends Controller
         }
     }
 
-
-
     public function show(array $request):JsonResponse
     {
         try{
             $book = $this->book->where('idx',$request['idx'])->first();
+            if(!$book){
+                throw new NoDataException("idx not have in table");
+            }
             $book = new BookEditResource($book);
             $book = $book->response()->getData(true);
             return $this->sendResponse("Book Show Success",$book);
+        }catch(NoDataException $e){
+            return $this->sendNoDataResponse($e->messages());
         }catch(Exception $e){
             return $this->sendError($e->getMessage());
         }
@@ -95,8 +98,10 @@ class BookService extends Controller
             return $this->sendError($e->getMessage());
         }
     }
-
-    private function imageDelete(object $image):void
+    ///////////////////////////////////////////////////////////
+    /****Private Functions *****/
+    ///////////////////////////////////////////////////////////
+    private function imageDelete(string $image):void
     {
         File::delete(public_path() . '/images/book/' . $image);
     }

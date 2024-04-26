@@ -31,6 +31,7 @@ class BookService extends Controller
         }
     }
 
+
     public function store(array $request):JsonResponse
     {
         try{
@@ -62,6 +63,7 @@ class BookService extends Controller
             return $this->sendError($e->getMessage());
         }
     }
+
 
     public function update(array $request):JsonResponse
     {

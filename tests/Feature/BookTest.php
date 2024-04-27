@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class BookTest extends TestCase
 {
-    use RefreshDatabase,WithFaker;
     /**
      * A basic feature test example.
      */

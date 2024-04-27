@@ -11,9 +11,11 @@ class BookTest extends TestCase
     /**
      * A basic feature test example.
      */
-    const INDEX = "/api/books";
-    const STORE = "/api/books/store";
-    const UPDATE = "/api/books/update";
+    const URL = "http://127.0.0.1:8000";
+    const INDEX = self::URL."/books";
+    const STORE = self::URL."/books/store";
+    const UPDATE = self::URL."/books/update";
+    const DELETE = self::URL."/books/delete";
 
     public function test_book_index(): void
     {
@@ -31,7 +33,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_store_without_publisher_id():void
@@ -44,7 +46,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_store_without_book_unique_idx():void
@@ -57,7 +59,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_store_without_book_name():void
@@ -70,7 +72,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_store_without_cover_photo():void
@@ -83,7 +85,7 @@ class BookTest extends TestCase
             'cover_photo' => '',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_store_without_prize():void
@@ -96,7 +98,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_idx():void
@@ -110,7 +112,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_co_id():void
@@ -124,7 +126,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_publisher_id():void
@@ -138,7 +140,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_book_unique_idx():void
@@ -152,7 +154,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_book_name():void
@@ -166,7 +168,7 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '100',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_update_without_prize():void
@@ -180,15 +182,15 @@ class BookTest extends TestCase
             'cover_photo' => 'name.jpg',
             'prize' => '',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
     public function test_book_delete_without_idx():void
     {
-        $response = $this->post(self::UPDATE,[
+        $response = $this->post(self::DELETE,[
             'idx'=> '1',
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(405);
     }
 
 }

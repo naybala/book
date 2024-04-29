@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Book;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookStoreRequest extends FormRequest
 {
@@ -24,7 +25,8 @@ class BookStoreRequest extends FormRequest
         return [
             'co_id' => ['required', 'integer'],
             'publisher_id' => ['required', 'integer'],
-            'book_unique_idx' => ['required', 'string'],
+            'book_unique_idx' => ['required', 'string',Rule::unique('tbl_book', 'book_unique_idx')
+            ->where(fn($query) => $query->whereNull('deleted_at'))],
             'book_name' => ['required', 'string'],
             'cover_photo' => ['required', 'image'],
             'prize' => '',
